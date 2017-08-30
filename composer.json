@@ -1,0 +1,32 @@
+{
+  "name": "mizmoz/router",
+  "description": "Mizmoz Router",
+  "website": "https://www.mizmoz.com",
+  "type": "library",
+  "version": "0.1.0",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ian Chadwick",
+      "email": "chad@mizmoz.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Mizmoz\\Router\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Mizmoz\\Router\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=7.0",
+    "guzzlehttp/psr7": "^1.4",
+    "psr/container": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.2"
+  }
+}
