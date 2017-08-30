@@ -2,16 +2,16 @@
 
 namespace Mizmoz\Router\Contract;
 
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 interface DispatcherInterface
 {
     /**
      * Dispatch the request
      *
-     * @param RequestInterface $request
+     * @param ServerRequestInterface $request
      * @return ResponseInterface
      */
-    public function dispatch(RequestInterface $request): ResponseInterface;
+    public function dispatch(ServerRequestInterface $request): ResponseInterface;
 }

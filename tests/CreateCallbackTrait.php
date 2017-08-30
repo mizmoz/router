@@ -2,7 +2,7 @@
 
 namespace Mizmoz\Router\Tests;
 
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\ServerRequest;
 use function GuzzleHttp\Psr7\stream_for;
 use Mizmoz\Router\Contract\RouteInterface;
 use Mizmoz\Router\Dispatcher;
@@ -35,7 +35,7 @@ trait CreateCallbackTrait
     private function getResponse(RouteInterface $route, string $uri, string $method = 'GET'): ResponseInterface
     {
         return (new Dispatcher($route, new Container()))
-            ->dispatch(new Request($method, $uri));
+            ->dispatch(new ServerRequest($method, $uri));
     }
 
     /**

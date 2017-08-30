@@ -2,21 +2,21 @@
 
 namespace Mizmoz\Router\Contract;
 
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 interface MiddlewareInterface
 {
     /**
      * Process the middleware
      * 
-     * @param RequestInterface $request
+     * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @param MiddlewareInterface|null $next
      * @return ResponseInterface
      */
     public function process(
-        RequestInterface $request,
+        ServerRequestInterface $request,
         ResponseInterface $response,
         MiddlewareInterface $next = null
     ): ResponseInterface;

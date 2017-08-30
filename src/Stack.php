@@ -4,8 +4,8 @@ namespace Mizmoz\Router;
 
 use Mizmoz\Router\Contract\MiddlewareInterface;
 use Mizmoz\Router\Contract\StackInterface;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Stack implements StackInterface
 {
@@ -39,7 +39,7 @@ class Stack implements StackInterface
      * @inheritDoc
      */
     public function process(
-        RequestInterface $request,
+        ServerRequestInterface $request,
         ResponseInterface $response,
         MiddlewareInterface $next = null
     ): ResponseInterface
@@ -48,11 +48,11 @@ class Stack implements StackInterface
     }
 
     /**
-     * @param RequestInterface $request
+     * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function __invoke(RequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         if (! $this->stack) {
             return $response;

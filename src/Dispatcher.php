@@ -10,8 +10,8 @@ use Mizmoz\Router\Contract\RouteInterface;
 use Mizmoz\Router\Exception\CannotExecuteRouteException;
 use Mizmoz\Router\Parser\Result;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class Dispatcher implements DispatcherInterface
 {
@@ -40,7 +40,7 @@ class Dispatcher implements DispatcherInterface
     /**
      * @inheritDoc
      */
-    public function dispatch(RequestInterface $request): ResponseInterface
+    public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
         $result = $this->route->match($request->getMethod(), $request->getUri());
 
@@ -59,13 +59,13 @@ class Dispatcher implements DispatcherInterface
     /**
      * Execute the route
      *
-     * @param RequestInterface $request
+     * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @param ResultInterface $result
      * @return ResponseInterface
      */
     private function executeRoute(
-        RequestInterface $request, ResponseInterface $response, ResultInterface $result
+        ServerRequestInterface $request, ResponseInterface $response, ResultInterface $result
     ): ResponseInterface
     {
         $callback = $result->getRoute()->getCallback();

@@ -6,7 +6,7 @@ A Simple Router for HTTP
 
 - Be lightweight
 - Use PSR-7 HTTP message interfaces
-- Use PSR-15 HTTP server middleware (when it becomes standardised)
+- Use PSR-15 HTTP server middleware (when it becomes standardised, maybe, it's a mess right now)
 - Resolution with PSR-11: Container interface
 
 ## Basic Usage
@@ -21,7 +21,7 @@ $route = Route::get('/', function (RequestInterface $request, ResponseInterface 
 $dispatcher = new Router($route, $container);
 
 // dispatch the route by passing a PSR-7 compatible Request
-$response = $dispatcher->dispatch(new Request('GET', '/'));
+$response = $dispatcher->dispatch(new ServerRequest('GET', '/'));
 
 exit($response->getBody()->getContents());
 
@@ -44,6 +44,9 @@ Route::get('/', HomePage::class, function (RouteInterface $r) {
     // add some child routes
     $r->addRoute('GET', '/profile', ...);
 });
+
+// wildcard matching
+Route::get('/app/*', AppController::class);
 ```
 
 #### Routes with variables

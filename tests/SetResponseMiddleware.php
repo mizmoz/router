@@ -3,8 +3,8 @@
 namespace Mizmoz\Router\Tests;
 
 use Mizmoz\Router\Contract\MiddlewareInterface;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class SetResponseMiddleware implements MiddlewareInterface
 {
@@ -34,7 +34,7 @@ class SetResponseMiddleware implements MiddlewareInterface
      * @inheritDoc
      */
     public function process(
-        RequestInterface $request,
+        ServerRequestInterface $request,
         ResponseInterface $response,
         MiddlewareInterface $next = null
     ): ResponseInterface
