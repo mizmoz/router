@@ -1,4 +1,8 @@
 
+v0.4.0
+
+- Add the router results object to the ServerRequest object instead of passing it the the route method separately
+
 v0.3.0
 
 - Change router to use ServerRequestInterface rather than RequestInterface

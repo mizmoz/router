@@ -15,6 +15,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Dispatcher implements DispatcherInterface
 {
+    const ATTRIBUTE_RESULT_KEY = 'routeResult';
+
     /**
      * @var RouteInterface
      */
@@ -49,6 +51,9 @@ class Dispatcher implements DispatcherInterface
             return $this->responseNotFound();
         }
 
+        // add the route variables to the request
+        $request = $request->withAttribute(self::ATTRIBUTE_RESULT_KEY, $result);
+
         // we found the route, first execute the middleware
         $response = $result->getStack()->process($request, new Response());
 
@@ -79,18 +84,18 @@ class Dispatcher implements DispatcherInterface
         if (is_array($callback) && count($callback) === 2) {
             // resolve the [class, method] call
             list($class, $method) = $callback;
-            $callback = ($this->container ? function ($request, $response, $result) use ($class, $method) {
+            $callback = ($this->container ? function ($request, $response) use ($class, $method) {
                 $class = $this->container->get($class);
-                return $class->$method($request, $response, $result);
+                return $class->$method($request, $response);
             } : null);
         }
 
         if ($callback instanceof MiddlewareInterface) {
-            return $callback->process($request, $response, $result);
+            return $callback->process($request, $response);
         }
 
         if (is_callable($callback)) {
-            return $callback($request, $response, $result);
+            return $callback($request, $response);
         }
 
         throw new CannotExecuteRouteException('Dispatch doesn\'t know how to handle the callback');

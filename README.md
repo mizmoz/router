@@ -59,6 +59,15 @@ $route = new Route('GET', '/users/:userId', UserGet::class);
 $userId = $route->match('GET', '/users/123')->getVariable('userId');
 ```
 
+#### Get the route result object from the request either in the route endpoint or middleware
+
+```php
+public function myMethod(ServerRequestInterface $request, ...)
+{
+    var_dump($request->getAttribute(Dispatcher::ATTRIBUTE_RESULT_KEY));
+}
+```
+
 #### Middleware
 
 ```php

@@ -3,24 +3,21 @@
 namespace Mizmoz\Router\Tests;
 
 use function GuzzleHttp\Psr7\stream_for;
-use Mizmoz\Router\Contract\Parser\ResultInterface;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class CallbackClass
 {
     const RESPONSE = 'callback-called';
 
     /**
-     * @param RequestInterface $request
+     * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param ResultInterface $result
      * @return ResponseInterface
      */
     public function callThis(
-        RequestInterface $request,
-        ResponseInterface $response,
-        ResultInterface $result
+        ServerRequestInterface $request,
+        ResponseInterface $response
     ): ResponseInterface
     {
         return $response->withBody(stream_for(self::RESPONSE));
