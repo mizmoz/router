@@ -33,6 +33,12 @@ class Plain extends ParserBase
                 continue;
             }
 
+            if ($matchPart === '*') {
+                // wildcard match
+                $matched = $uriParts;
+                break;
+            }
+
             // keep the parts we've matched
             $matched[] = $uriParts[$key];
 

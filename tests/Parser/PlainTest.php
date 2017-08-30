@@ -61,4 +61,16 @@ class PlainTest extends TestCase
             'userId' => '123',
         ], $result->getVariables());
     }
+
+    public function testMatchWildcard()
+    {
+        $result = (new Plain('/*'))->match('/app');
+        $this->assertEquals(Result::MATCH_FULL, $result->match());
+    }
+
+    public function testNoMatchWildcard()
+    {
+        $result = (new Plain('/app/*'))->match('/application/cheese');
+        $this->assertEquals(Result::MATCH_NONE, $result->match());
+    }
 }
