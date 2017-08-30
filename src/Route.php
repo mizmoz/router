@@ -14,14 +14,14 @@ use Mizmoz\Router\Parser\Result;
  * Class Route
  * @package Mizmoz\Router
  *
- * @method static RouteInterface delete($method, $match, $callback, callable $routesCallback = null);
- * @method static RouteInterface get($method, $match, $callback, callable $routesCallback = null);
- * @method static RouteInterface head($method, $match, $callback, callable $routesCallback = null);
- * @method static RouteInterface options($method, $match, $callback, callable $routesCallback = null);
- * @method static RouteInterface patch($method, $match, $callback, callable $routesCallback = null);
- * @method static RouteInterface post($method, $match, $callback, callable $routesCallback = null);
- * @method static RouteInterface put($method, $match, $callback, callable $routesCallback = null);
- * @method static RouteInterface any($method, $match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface delete($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface get($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface head($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface options($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface patch($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface post($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface put($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface any($match, $callback, callable $routesCallback = null);
  */
 class Route implements RouteInterface
 {
@@ -90,7 +90,7 @@ class Route implements RouteInterface
     }
 
     /**
-     * Create the route using Route::post($method, $callback, $routesCallback);
+     * Create the route using Route::post($match, $callback, $routesCallback);
      *
      * @param $name
      * @param $arguments
