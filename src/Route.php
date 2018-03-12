@@ -90,13 +90,13 @@ class Route implements RouteInterface
     }
 
     /**
-     * Create the route using Route::post($match, $callback, $routesCallback);
+     * Get the arguments for the call
      *
      * @param $name
      * @param $arguments
-     * @return RouteInterface
+     * @return array
      */
-    public static function __callStatic($name, $arguments)
+    public static function getArgumentsForCall($name, $arguments): array
     {
         // uppercase the method name
         $name = strtoupper($name);
@@ -111,8 +111,33 @@ class Route implements RouteInterface
         // add the name to the arguments
         array_unshift($arguments, $name);
 
-        // create and return the new route
-        return (new \ReflectionClass(static::class))->newInstanceArgs($arguments);
+        // return the arguments
+        return $arguments;
+    }
+
+    /**
+     * Create the route using Route::post($match, $callback, $routesCallback);
+     *
+     * @param $name
+     * @param $arguments
+     * @return RouteInterface
+     * @throws \ReflectionException
+     */
+    public static function __callStatic($name, $arguments)
+    {
+        return (new \ReflectionClass(static::class))->newInstanceArgs(static::getArgumentsForCall($name, $arguments));
+    }
+
+    /**
+     * Create the route using $route->post($match, $callback, $routesCallback);
+     *
+     * @param $name
+     * @param $arguments
+     * @return RouteInterface
+     */
+    public function __call($name, $arguments)
+    {
+        return call_user_func_array([$this, 'addRoute'], static::getArgumentsForCall($name, $arguments));
     }
 
     /**

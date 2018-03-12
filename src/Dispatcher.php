@@ -8,6 +8,8 @@ use Mizmoz\Router\Contract\MiddlewareInterface;
 use Mizmoz\Router\Contract\Parser\ResultInterface;
 use Mizmoz\Router\Contract\RouteInterface;
 use Mizmoz\Router\Exception\CannotExecuteRouteException;
+use Mizmoz\Router\Exception\RouteNotFoundException;
+use Mizmoz\Router\Middleware\Route;
 use Mizmoz\Router\Parser\Result;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -44,34 +46,29 @@ class Dispatcher implements DispatcherInterface
      */
     public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
-        $result = $this->route->match($request->getMethod(), $request->getUri());
+        $result = $this->route->match($request->getMethod(), $request->getUri()->getPath());
 
         if (in_array($result->match(), [Result::MATCH_PARTIAL, Result::MATCH_NONE])) {
-            // failed to match
-            return $this->responseNotFound();
+            // failed to match the route
+            throw (new RouteNotFoundException())->setRequest($request);
         }
 
         // add the route variables to the request
         $request = $request->withAttribute(self::ATTRIBUTE_RESULT_KEY, $result);
 
         // we found the route, first execute the middleware
-        $response = $result->getStack()->process($request, new Response());
-
-        // execute the main route
-        return $this->executeRoute($request, $response, $result);
+        return $result->getStack()
+            ->addMiddleware($this->getRouteAsMiddleware($result))
+            ->process($request, new Response());
     }
 
     /**
-     * Execute the route
+     * Get the route as a middleware
      *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
      * @param ResultInterface $result
-     * @return ResponseInterface
+     * @return MiddlewareInterface
      */
-    private function executeRoute(
-        ServerRequestInterface $request, ResponseInterface $response, ResultInterface $result
-    ): ResponseInterface
+    private function getRouteAsMiddleware(ResultInterface $result): MiddlewareInterface
     {
         $callback = $result->getRoute()->getCallback();
 
@@ -91,23 +88,14 @@ class Dispatcher implements DispatcherInterface
         }
 
         if ($callback instanceof MiddlewareInterface) {
-            return $callback->process($request, $response);
+            // return the middleware
+            return $callback;
         }
 
         if (is_callable($callback)) {
-            return $callback($request, $response);
+            return new Route($callback);
         }
 
         throw new CannotExecuteRouteException('Dispatch doesn\'t know how to handle the callback');
-    }
-
-    /**
-     * No route to handle this request
-     *
-     * @return ResponseInterface
-     */
-    private function responseNotFound(): ResponseInterface
-    {
-        return new Response(404);
     }
 }

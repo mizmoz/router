@@ -35,7 +35,7 @@ trait CreateCallbackTrait
     private function getResponse(RouteInterface $route, string $uri, string $method = 'GET'): ResponseInterface
     {
         return (new Dispatcher($route, new Container()))
-            ->dispatch(new ServerRequest($method, $uri));
+            ->dispatch(new ServerRequest($method, 'https://www.mizmoz.com' . $uri));
     }
 
     /**

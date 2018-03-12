@@ -87,3 +87,4 @@ $router->get('/', function (RouteInterface $r) {
 ## Roadmap
 
 - Add REST API helper for classes
+- Allow fallback / catch all / error routes

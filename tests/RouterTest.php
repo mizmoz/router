@@ -69,4 +69,36 @@ class RouterTest extends TestCase
         $this->assertEquals('Dashboard', $this->getContents($route, '/dashboard'));
         $this->assertEquals('Dashboard Reports', $this->getContents($route, '/dashboard/reports'));
     }
+
+    /**
+     * Test adding routes with the magic methods
+     */
+    public function testMultipleRoutesUsingMagicMethods()
+    {
+        $route = Route::get('/', $this->callbackWithOkResponse('Homepage'), function (RouteInterface $root) {
+            $root->get('/app', $this->callbackWithOkResponse('App'));
+        });
+
+        // check the routes are accessible
+        $this->assertEquals('Homepage', $this->getContents($route, '/'));
+        $this->assertEquals('App', $this->getContents($route, '/app'));
+    }
+
+    /**
+     * Test catching all routes
+     */
+    public function testRouteCatchAll()
+    {
+        $route = Route::get('/', $this->callbackWithOkResponse('Homepage'), function (RouteInterface $root) {
+            // some app route
+            $root->get('/app', $this->callbackWithOkResponse('App'));
+
+            // add catch all for all missing routes
+            $root->get('/*', $this->callbackWithOkResponse('Error'));
+        });
+
+        // check the routes are accessible
+        $this->assertEquals('Homepage', $this->getContents($route, '/'));
+        $this->assertEquals('Error', $this->getContents($route, '/app/cheese'));
+    }
 }

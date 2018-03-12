@@ -1,4 +1,11 @@
 
+
+
+v0.5.0
+
+- Change Dispatcher to throw RouteNotFoundException instead of returning 
+- Fix bug in dispatcher where $request->getUri() would return an object rather than the path
+
 v0.4.1
 
 - Fix Route docblock comments

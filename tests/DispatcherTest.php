@@ -18,7 +18,7 @@ class DispatcherTest extends TestCase
         $route = new Route('GET', '/', $this->callbackWithOkResponse('Homepage'));
 
         // create the dispatcher
-        $response = (new Dispatcher($route))->dispatch(new ServerRequest('GET', '/'));
+        $response = (new Dispatcher($route))->dispatch(new ServerRequest('GET', 'https://www.mizmoz.com/'));
 
         // check we get a response
         $this->assertInstanceOf(ResponseInterface::class, $response);
@@ -34,7 +34,7 @@ class DispatcherTest extends TestCase
             ->addMiddleware(new SetResponseMiddleware('X-Middleware', 'Middleware-1'));
 
         // create the dispatcher
-        $response = (new Dispatcher($route))->dispatch(new ServerRequest('GET', '/'));
+        $response = (new Dispatcher($route))->dispatch(new ServerRequest('GET', 'https://www.mizmoz.com/'));
 
         // check it's OK
         $this->assertEquals(200, $response->getStatusCode());
@@ -51,7 +51,7 @@ class DispatcherTest extends TestCase
         }))->addMiddleware(new SetResponseMiddleware('X-Middleware', 'Outer'));
 
         // create the dispatcher
-        $response = (new Dispatcher($route))->dispatch(new ServerRequest('GET', '/dashboard'));
+        $response = (new Dispatcher($route))->dispatch(new ServerRequest('GET', 'https://www.mizmoz.com/dashboard'));
 
         // check it's OK
         $this->assertEquals(200, $response->getStatusCode());
@@ -69,7 +69,7 @@ class DispatcherTest extends TestCase
         }))->addMiddleware(new SetResponseMiddleware('X-Middleware', 'Outer'));
 
         // create the dispatcher
-        $response = (new Dispatcher($route))->dispatch(new ServerRequest('GET', '/dashboard'));
+        $response = (new Dispatcher($route))->dispatch(new ServerRequest('GET', 'https://www.mizmoz.com/dashboard'));
 
         // check it's OK
         $this->assertEquals(200, $response->getStatusCode());

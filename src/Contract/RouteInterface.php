@@ -4,6 +4,19 @@ namespace Mizmoz\Router\Contract;
 
 use Mizmoz\Router\Contract\Parser\ResultInterface;
 
+/**
+ * Interface RouteInterface
+ * @package Mizmoz\Router\Contract
+ *
+ * @method static RouteInterface delete($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface get($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface head($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface options($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface patch($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface post($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface put($match, $callback, callable $routesCallback = null);
+ * @method static RouteInterface any($match, $callback, callable $routesCallback = null);
+ */
 interface RouteInterface
 {
     /**
