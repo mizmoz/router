@@ -2,13 +2,13 @@
 
 namespace Mizmoz\Router\Tests;
 
-use function GuzzleHttp\Psr7\stream_for;
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class CallbackClass
 {
-    const RESPONSE = 'callback-called';
+    const string RESPONSE = 'callback-called';
 
     /**
      * @param ServerRequestInterface $request
@@ -20,6 +20,6 @@ class CallbackClass
         ResponseInterface $response
     ): ResponseInterface
     {
-        return $response->withBody(stream_for(self::RESPONSE));
+        return $response->withBody(Utils::streamFor(self::RESPONSE));
     }
 }

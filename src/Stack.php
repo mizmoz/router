@@ -10,9 +10,9 @@ use Psr\Http\Message\ServerRequestInterface;
 class Stack implements StackInterface
 {
     /**
-     * @var array
+     * @var array<StackInterface|MiddlewareInterface>
      */
-    private $stack = [];
+    private array $stack = [];
 
     /**
      * @inheritDoc
@@ -58,8 +58,8 @@ class Stack implements StackInterface
             return $response;
         }
 
-        /** @var MiddlewareInterface $middleware */
         while ($middleware = array_shift($this->stack)) {
+            /** @var MiddlewareInterface $middleware */
             $response = $middleware->process($request, $response, $this);
         }
 

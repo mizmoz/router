@@ -10,18 +10,18 @@ interface ResultInterface
     /**
      * Not actually a match
      */
-    const MATCH_NONE = 'none';
+    const string MATCH_NONE = 'none';
 
     /**
      * Partial match such as /app is a partial match of the uri /app/dashboard.
      * This would signal that we need to look at the routes children
      */
-    const MATCH_PARTIAL = 'partial';
+    const string MATCH_PARTIAL = 'partial';
 
     /**
      * Full match, we're done
      */
-    const MATCH_FULL = 'full';
+    const string MATCH_FULL = 'full';
 
     /**
      * Add items to the stack
@@ -62,7 +62,7 @@ interface ResultInterface
     /**
      * Get any matched variables
      *
-     * @return array
+     * @return array<int|string,mixed>
      */
     public function getVariables(): array;
 
@@ -77,7 +77,7 @@ interface ResultInterface
     /**
      * Set the variables
      *
-     * @param array $variables
+     * @param array<int|string,mixed> $variables
      * @return ResultInterface
      */
     public function setVariables(array $variables): ResultInterface;

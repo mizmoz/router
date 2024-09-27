@@ -9,7 +9,7 @@ class Container implements ContainerInterface
     /**
      * @var array
      */
-    private $items = [];
+    private array $items;
 
     /**
      * Container constructor.
@@ -23,15 +23,15 @@ class Container implements ContainerInterface
     /**
      * @inheritDoc
      */
-    public function get($id)
+    public function get($id): mixed
     {
-        return (isset($this->items[$id]) ? $this->items[$id] : new $id);
+        return $this->items[$id] ?? new $id;
     }
 
     /**
      * @inheritDoc
      */
-    public function has($id)
+    public function has($id): bool
     {
         return isset($this->items[$id]);
     }

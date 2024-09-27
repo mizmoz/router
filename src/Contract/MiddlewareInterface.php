@@ -9,7 +9,7 @@ interface MiddlewareInterface
 {
     /**
      * Process the middleware
-     * 
+     *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @param MiddlewareInterface|null $next

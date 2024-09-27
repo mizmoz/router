@@ -12,32 +12,32 @@ class Result implements ResultInterface
     /**
      * @var string
      */
-    private $match;
+    private string $match;
 
     /**
-     * @var RouteInterface
+     * @var RouteInterface|null
      */
-    private $route;
+    private ?RouteInterface $route = null;
 
     /**
      * @var StackInterface
      */
-    private $stack;
+    private StackInterface $stack;
 
     /**
      * @var string
      */
-    private $uri = '';
+    private string $uri = '';
 
     /**
-     * @var array
+     * @var array<int|string,mixed>
      */
-    private $variables = [];
+    private array $variables = [];
 
     /**
      * Result constructor.
      * @param string $match
-     * @param RouteInterface $route
+     * @param RouteInterface|null $route
      */
     public function __construct(string $match = self::MATCH_NONE, RouteInterface $route = null)
     {
@@ -99,9 +99,7 @@ class Result implements ResultInterface
     }
 
     /**
-     * Get any matched variables
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getVariables(): array
     {
@@ -121,10 +119,7 @@ class Result implements ResultInterface
     }
 
     /**
-     * Set the variables
-     *
-     * @param array $variables
-     * @return ResultInterface
+     * @inheritDoc
      */
     public function setVariables(array $variables): ResultInterface
     {

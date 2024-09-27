@@ -11,12 +11,12 @@ class SetResponseMiddleware implements MiddlewareInterface
     /**
      * @var string
      */
-    private $header;
+    private string $header;
 
     /**
      * @var string
      */
-    private $value;
+    private string $value;
 
     /**
      * Set a header on the response object
@@ -40,6 +40,6 @@ class SetResponseMiddleware implements MiddlewareInterface
     ): ResponseInterface
     {
         $response = $response->withAddedHeader($this->header, $this->value);
-        return ($next ? $next->process($request, $response) : $response);
+        return $next ? $next->process($request, $response) : $response;
     }
 }

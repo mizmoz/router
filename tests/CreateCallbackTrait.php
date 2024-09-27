@@ -3,7 +3,7 @@
 namespace Mizmoz\Router\Tests;
 
 use GuzzleHttp\Psr7\ServerRequest;
-use function GuzzleHttp\Psr7\stream_for;
+use GuzzleHttp\Psr7\Utils;
 use Mizmoz\Router\Contract\RouteInterface;
 use Mizmoz\Router\Dispatcher;
 use Psr\Http\Message\RequestInterface;
@@ -17,10 +17,10 @@ trait CreateCallbackTrait
      * @param null $body
      * @return \Closure
      */
-    private function callbackWithOkResponse($body = null)
+    private function callbackWithOkResponse($body = null): \Closure
     {
         return function (RequestInterface $request, ResponseInterface $response) use ($body) {
-            return (is_null($body) ? $response : $response->withBody(stream_for($body)));
+            return is_null($body) ? $response : $response->withBody(Utils::streamFor($body));
         };
     }
 
@@ -46,7 +46,7 @@ trait CreateCallbackTrait
      * @param string $method
      * @return string|null
      */
-    private function getContents(RouteInterface $route, string $uri, string $method = 'GET')
+    private function getContents(RouteInterface $route, string $uri, string $method = 'GET'): ?string
     {
         return $this->getResponse($route, $uri, $method)
             ->getBody()

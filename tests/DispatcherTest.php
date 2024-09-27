@@ -12,7 +12,7 @@ class DispatcherTest extends TestCase
 {
     use CreateCallbackTrait;
 
-    public function testDispatchRoute()
+    public function testDispatchRoute(): void
     {
         // create test route
         $route = new Route('GET', '/', $this->callbackWithOkResponse('Homepage'));
@@ -27,7 +27,7 @@ class DispatcherTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testDispatchRouteWithMiddleware()
+    public function testDispatchRouteWithMiddleware(): void
     {
         // create the route with middleware
         $route = (new Route('GET', '/', $this->callbackWithOkResponse('Homepage')))
@@ -43,7 +43,7 @@ class DispatcherTest extends TestCase
         $this->assertEquals(['Middleware-1'], $response->getHeader('X-Middleware'));
     }
 
-    public function testDispatchRouteWithInheritedMiddleware()
+    public function testDispatchRouteWithInheritedMiddleware(): void
     {
         // create the route with middleware
         $route = (new Route('GET', '/', $this->callbackWithOkResponse('Homepage'), function (RouteInterface $r) {
@@ -60,7 +60,7 @@ class DispatcherTest extends TestCase
         $this->assertEquals(['Outer'], $response->getHeader('X-Middleware'));
     }
 
-    public function testDispatchRouteWithInheritedAndOwnMiddleware()
+    public function testDispatchRouteWithInheritedAndOwnMiddleware(): void
     {
         // create the route with middleware
         $route = (new Route('GET', '/', $this->callbackWithOkResponse('Homepage'), function (RouteInterface $r) {
@@ -76,5 +76,15 @@ class DispatcherTest extends TestCase
 
         // check we get the correct response
         $this->assertEquals(['Outer', 'Inner'], $response->getHeader('X-Middleware'));
+    }
+
+    public function testDispatchRouteLookupFailure(): void
+    {
+        // create the route with middleware
+        $route = new Route('GET', '/', $this->callbackWithOkResponse('Homepage'));
+
+        // create the dispatcher
+        $this->expectException(\Mizmoz\Router\Exception\RouteNotFoundException::class);
+        (new Dispatcher($route))->dispatch(new ServerRequest('GET', 'https://www.mizmoz.com/dashboard'));
     }
 }

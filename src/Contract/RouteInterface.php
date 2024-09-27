@@ -22,13 +22,13 @@ interface RouteInterface
     /**
      * Add a route to the router
      *
-     * @param string|array $method
+     * @param string|string[] $method
      * @param string $match
-     * @param callable|MiddlewareInterface $callback
-     * @param callable $routesCallback
+     * @param array{string,string}|callable|MiddlewareInterface $callback
+     * @param callable|null $routesCallback
      * @return RouteInterface
      */
-    public function addRoute($method, string $match, $callback, callable $routesCallback = null): RouteInterface;
+    public function addRoute(string|array $method, string $match, array|callable|MiddlewareInterface $callback, callable $routesCallback = null): RouteInterface;
 
     /**
      * Add middleware to the route
@@ -41,9 +41,9 @@ interface RouteInterface
     /**
      * Get the callback
      *
-     * @return callable|MiddlewareInterface
+     * @return array{string,string}|callable|MiddlewareInterface
      */
-    public function getCallback();
+    public function getCallback(): array|callable|MiddlewareInterface;
 
     /**
      * Get the request stack

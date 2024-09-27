@@ -17,23 +17,23 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class Dispatcher implements DispatcherInterface
 {
-    const ATTRIBUTE_RESULT_KEY = 'routeResult';
+    const string ATTRIBUTE_RESULT_KEY = 'routeResult';
 
     /**
      * @var RouteInterface
      */
-    private $route;
+    private RouteInterface $route;
 
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|null
      */
-    private $container;
+    private ?ContainerInterface $container;
 
     /**
      * Dispatcher constructor.
      *
      * @param RouteInterface $route
-     * @param ContainerInterface $container
+     * @param ContainerInterface|null $container
      */
     public function __construct(RouteInterface $route, ContainerInterface $container = null)
     {
@@ -48,7 +48,7 @@ class Dispatcher implements DispatcherInterface
     {
         $result = $this->route->match($request->getMethod(), $request->getUri()->getPath());
 
-        if (in_array($result->match(), [Result::MATCH_PARTIAL, Result::MATCH_NONE])) {
+        if (in_array($result->match(), [ResultInterface::MATCH_PARTIAL, ResultInterface::MATCH_NONE])) {
             // failed to match the route
             throw (new RouteNotFoundException())->setRequest($request);
         }
@@ -75,7 +75,7 @@ class Dispatcher implements DispatcherInterface
         // resolve the callback
         if (is_string($callback)) {
             // resolve using the container
-            $callback = ($this->container ? $this->container->get($callback) : null);
+            $callback = $this->container ? $this->container->get($callback) : null;
         }
 
         if (is_array($callback) && count($callback) === 2) {

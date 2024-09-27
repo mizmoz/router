@@ -1,5 +1,8 @@
+v1.0.0
 
-
+- Update to PHP 8.3
+- Explicitly define psr/http-message v2.0 usage
+- Add PHPStan static analysis
 
 v0.5.0
 

@@ -12,7 +12,7 @@ class RouterTest extends TestCase
     /**
      * Test some plain text routing
      */
-    public function testPlainRoute()
+    public function testPlainRoute(): void
     {
         // create the root route
         $route = new Route('GET', '/', $this->callbackWithOkResponse('Homepage'));
@@ -24,7 +24,7 @@ class RouterTest extends TestCase
     /**
      * Test some variable routing
      */
-    public function testVariableRoute()
+    public function testVariableRoute(): void
     {
         // create the root route
         $route = new Route('GET', '/user/:userId', $this->callbackWithOkResponse('User'));
@@ -36,7 +36,7 @@ class RouterTest extends TestCase
     /**
      * Test some variable routing
      */
-    public function testPlainRouteWithClassResolution()
+    public function testPlainRouteWithClassResolution(): void
     {
         // create the root route
         $route = new Route('GET', '/user/:userId', [CallbackClass::class, 'callThis']);
@@ -48,7 +48,7 @@ class RouterTest extends TestCase
     /**
      * Test some basic routing
      */
-    public function testMultipleBasicRoutes()
+    public function testMultipleBasicRoutes(): void
     {
         // create the root route
         $route = new Route('GET', '/', $this->callbackWithOkResponse('Homepage'), function (RouteInterface $root) {
@@ -73,7 +73,7 @@ class RouterTest extends TestCase
     /**
      * Test adding routes with the magic methods
      */
-    public function testMultipleRoutesUsingMagicMethods()
+    public function testMultipleRoutesUsingMagicMethods(): void
     {
         $route = Route::get('/', $this->callbackWithOkResponse('Homepage'), function (RouteInterface $root) {
             $root->get('/app', $this->callbackWithOkResponse('App'));
@@ -87,7 +87,7 @@ class RouterTest extends TestCase
     /**
      * Test catching all routes
      */
-    public function testRouteCatchAll()
+    public function testRouteCatchAll(): void
     {
         $route = Route::get('/', $this->callbackWithOkResponse('Homepage'), function (RouteInterface $root) {
             // some app route

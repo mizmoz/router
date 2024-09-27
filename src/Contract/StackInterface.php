@@ -24,7 +24,7 @@ interface StackInterface extends MiddlewareInterface
     /**
      * Get the stack as an array
      *
-     * @return array
+     * @return array<StackInterface|MiddlewareInterface>
      */
     public function toArray(): array;
 }

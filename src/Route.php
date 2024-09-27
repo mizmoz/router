@@ -27,24 +27,26 @@ class Route implements RouteInterface
 {
     /**
      * Allowed http methods
+     *
+     * @vat string[]
      */
-    const ALLOWED_METHODS = [
+    const array ALLOWED_METHODS = [
         'DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT',
     ];
 
     /**
      * HTTP method/s for this route
      *
-     * @var array
+     * @var string[]
      */
-    private $method;
+    private array $method;
 
     /**
      * Route match
      *
      * @var string
      */
-    private $match;
+    private string $match;
 
     /**
      * @var callable|MiddlewareInterface
@@ -56,31 +58,31 @@ class Route implements RouteInterface
      *
      * @var StackInterface
      */
-    private $stack;
+    private StackInterface $stack;
 
     /**
      * Child routes
      *
-     * @var array
+     * @var Route[]
      */
-    private $routes = [];
+    private array $routes = [];
 
     /**
-     * @var callable
+     * @var callable|null
      */
     private $routesCallback;
 
     /**
      * Route constructor.
      *
-     * @param string|array $method
+     * @param string[]|string $method
      * @param string $match
-     * @param callable|MiddlewareInterface $callback
-     * @param callable $routesCallback Add routes using a callback
+     * @param array{string, string}|callable|MiddlewareInterface $callback
+     * @param callable|null $routesCallback Add routes using a callback
      *
      * Callback should look like function (Route $route) { $route->addRoute(...); }
      */
-    public function __construct($method, $match, $callback, callable $routesCallback = null)
+    public function __construct(array|string $method, string $match, array|callable|MiddlewareInterface $callback, callable $routesCallback = null)
     {
         $this->stack = new Stack();
         $this->method = (is_array($method) ? $method : [$method]);
@@ -92,11 +94,11 @@ class Route implements RouteInterface
     /**
      * Get the arguments for the call
      *
-     * @param $name
-     * @param $arguments
-     * @return array
+     * @param string $name
+     * @param mixed[] $arguments
+     * @return mixed[]
      */
-    public static function getArgumentsForCall($name, $arguments): array
+    public static function getArgumentsForCall(string $name, array $arguments): array
     {
         // uppercase the method name
         $name = strtoupper($name);
@@ -104,7 +106,7 @@ class Route implements RouteInterface
         if ($name === 'ANY') {
             // allowed any of the methods
             $name = self::ALLOWED_METHODS;
-        } else if (! in_array($name, self::ALLOWED_METHODS)) {
+        } elseif (! in_array($name, self::ALLOWED_METHODS)) {
             throw new InvalidArgumentException('Route::method must be one of: ' . implode(', ', self::ALLOWED_METHODS));
         }
 
@@ -118,12 +120,12 @@ class Route implements RouteInterface
     /**
      * Create the route using Route::post($match, $callback, $routesCallback);
      *
-     * @param $name
-     * @param $arguments
+     * @param string $name
+     * @param mixed[] $arguments
      * @return RouteInterface
      * @throws \ReflectionException
      */
-    public static function __callStatic($name, $arguments)
+    public static function __callStatic(string $name, array $arguments): mixed
     {
         return (new \ReflectionClass(static::class))->newInstanceArgs(static::getArgumentsForCall($name, $arguments));
     }
@@ -131,11 +133,11 @@ class Route implements RouteInterface
     /**
      * Create the route using $route->post($match, $callback, $routesCallback);
      *
-     * @param $name
-     * @param $arguments
+     * @param string $name
+     * @param mixed[] $arguments
      * @return RouteInterface
      */
-    public function __call($name, $arguments)
+    public function __call(string $name, array $arguments): mixed
     {
         return call_user_func_array([$this, 'addRoute'], static::getArgumentsForCall($name, $arguments));
     }
@@ -143,9 +145,9 @@ class Route implements RouteInterface
     /**
      * @inheritDoc
      */
-    public function addRoute($method, string $match, $callback, callable $routesCallback = null): RouteInterface
+    public function addRoute($method, string $match, array|callable|MiddlewareInterface $callback, callable $routesCallback = null): RouteInterface
     {
-        return $this->routes[] = new static($method, $match, $callback, $routesCallback);
+        return $this->routes[] = new self($method, $match, $callback, $routesCallback);
     }
 
     /**
@@ -160,7 +162,7 @@ class Route implements RouteInterface
     /**
      * @inheritdoc
      */
-    public function getCallback()
+    public function getCallback(): array|callable|MiddlewareInterface
     {
         return $this->callback;
     }
@@ -180,14 +182,14 @@ class Route implements RouteInterface
     {
         $result = Factory::getParser($this->match)->match($uri);
 
-        if ($result->match() === Result::MATCH_NONE) {
+        if ($result->match() === ResultInterface::MATCH_NONE) {
             // no match
             return $result;
         }
 
-        if ($result->match() === Result::MATCH_FULL && in_array($method, $this->method)) {
+        if ($result->match() === ResultInterface::MATCH_FULL && in_array($method, $this->method)) {
             // valid match
-            return (new Result(Result::MATCH_FULL, $this))
+            return (new Result(ResultInterface::MATCH_FULL, $this))
                 ->addStack($this->stack)
                 ->setVariables($result->getVariables());
         }
@@ -201,7 +203,7 @@ class Route implements RouteInterface
         /** @var RouteInterface $route */
         foreach ($this->routes as $route) {
             $routeResult = $route->match($method, $result->getUri());
-            if ($routeResult->match() === Result::MATCH_FULL) {
+            if ($routeResult->match() === ResultInterface::MATCH_FULL) {
                 // add this routes middleware stack to the result
                 return $routeResult->addStack($this->stack);
             }
